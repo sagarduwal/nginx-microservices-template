@@ -13,7 +13,7 @@ jobs:
       run: docker-compose run frontend npm test
 
   build:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
