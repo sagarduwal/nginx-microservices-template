@@ -3,7 +3,17 @@ name: CI/CD Pipeline
 on: [push]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run backend tests
+      run: docker-compose run backend python -m unittest discover
+    - name: Run frontend tests
+      run: docker-compose run frontend npm test
+
   build:
+    needs: build
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,12 +32,3 @@ jobs:
     - name: Deploy services
       run: docker-compose up -d
 
-  test:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Run backend tests
-      run: docker-compose run backend python -m unittest discover
-    - name: Run frontend tests
-      run: docker-compose run frontend npm test
